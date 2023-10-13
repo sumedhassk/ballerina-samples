@@ -1,0 +1,183 @@
+[
+    {
+      "bookingId": "R10001",
+      "guest": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "phoneNumber": "+15551234567"
+      },
+      "bookingDetails": {
+        "hotelId": "H001",
+        "roomType": "Deluxe",
+        "checkInDate": "2023-10-05",
+        "checkOutDate": "2023-10-10",
+        "numberOfGuests": 2,
+        "kidsAges": [5],
+        "specialRequests": ["Near elevator"]
+      }
+    },
+    {
+      "bookingId": "R10002",
+      "guest": {
+        "firstName": "Jane",
+        "lastName": "Smith",
+        "email": "jane.smith@example.com",
+        "phoneNumber": "+15557654321"
+      },
+      "bookingDetails": {
+        "hotelId": "H002",
+        "roomType": "Standard",
+        "checkInDate": "2023-10-06",
+        "checkOutDate": "2023-10-08",
+        "numberOfGuests": 1,
+        "kidsAges": [],
+        "specialRequests": ["Late check-in"]
+      }
+    },
+    {
+      "bookingId": "R10003",
+      "guest": {
+        "firstName": "Robert",
+        "lastName": "Williams",
+        "email": "robert.williams@example.com",
+        "phoneNumber": "+15553456789"
+      },
+      "bookingDetails": {
+        "hotelId": "H003",
+        "roomType": "Suite",
+        "checkInDate": "2023-10-07",
+        "checkOutDate": "2023-10-11",
+        "numberOfGuests": 2,
+        "kidsAges": [3],
+        "specialRequests": ["Balcony view", "Late check-out"]
+      }
+    },
+    {
+      "bookingId": "R10004",
+      "guest": {
+        "firstName": "Emily",
+        "lastName": "Brown",
+        "email": "emily.brown@example.com",
+        "phoneNumber": "+15559876123"
+      },
+      "bookingDetails": {
+        "hotelId": "H004",
+        "roomType": "Deluxe",
+        "checkInDate": "2023-10-10",
+        "checkOutDate": "2023-10-12",
+        "numberOfGuests": 1,
+        "kidsAges": [],
+        "specialRequests": ["Higher floor"]
+      }
+    },
+    {
+      "bookingId": "R10005",
+      "guest": {
+        "firstName": "Michael",
+        "lastName": "Davis",
+        "email": "michael.davis@example.com",
+        "phoneNumber": "+15552345678"
+      },
+      "bookingDetails": {
+        "hotelId": "H005",
+        "roomType": "Standard",
+        "checkInDate": "2023-10-08",
+        "checkOutDate": "2023-10-10",
+        "numberOfGuests": 4,
+        "kidsAges": [7, 9],
+        "specialRequests": ["Extra bed", "Airport shuttle"]
+      }
+    },
+    {
+      "bookingId": "R10006",
+      "guest": {
+        "firstName": "Linda",
+        "lastName": "Wilson",
+        "email": "linda.wilson@example.com",
+        "phoneNumber": "+15557891234"
+      },
+      "bookingDetails": {
+        "hotelId": "H006",
+        "roomType": "Suite",
+        "checkInDate": "2023-10-12",
+        "checkOutDate": "2023-10-15",
+        "numberOfGuests": 3,
+        "kidsAges": [],
+        "specialRequests": ["Adjacent rooms"]
+      }
+    },
+    {
+      "bookingId": "R10007",
+      "guest": {
+        "firstName": "Daniel",
+        "lastName": "Jones",
+        "email": "daniel.jones@example.com",
+        "phoneNumber": "+15559012345"
+      },
+      "bookingDetails": {
+        "hotelId": "H007",
+        "roomType": "Standard",
+        "checkInDate": "2023-10-14",
+        "checkOutDate": "2023-10-16",
+        "numberOfGuests": 1,
+        "kidsAges": [],
+        "specialRequests": []
+      }
+    },
+    {
+      "bookingId": "R10008",
+      "guest": {
+        "firstName": "Elizabeth",
+        "lastName": "Garcia",
+        "email": "elizabeth.garcia@example.com",
+        "phoneNumber": "+15554567890"
+      },
+      "bookingDetails": {
+        "hotelId": "H008",
+        "roomType": "Deluxe",
+        "checkInDate": "2023-10-16",
+        "checkOutDate": "2023-10-20",
+        "numberOfGuests": 2,
+        "kidsAges": [10],
+        "specialRequests": ["Ground floor", "Allergy-friendly"]
+      }
+    },
+    {
+      "bookingId": "R10009",
+      "guest": {
+        "firstName": "James",
+        "lastName": "Martinez",
+        "email": "james.martinez@example.com",
+        "phoneNumber": "+15555678901"
+      },
+      "bookingDetails": {
+        "hotelId": "H009",
+        "roomType": "Suite",
+        "checkInDate": "2023-10-18",
+        "checkOutDate": "2023-10-22",
+        "numberOfGuests": 4,
+        "kidsAges": [6, 8],
+        "specialRequests": ["Adjoining rooms"]
+      }
+    },
+    {
+      "bookingId": "R10010",
+      "guest": {
+        "firstName": "Barbara",
+        "lastName": "Rodriguez",
+        "email": "barbara.rodriguez@example.com",
+        "phoneNumber": "+15556789012"
+      },
+      "bookingDetails": {
+        "hotelId": "H010",
+        "roomType": "Deluxe",
+        "checkInDate": "2023-10-20",
+        "checkOutDate": "2023-10-24",
+        "numberOfGuests": 3,
+        "kidsAges": [4, 5],
+        "specialRequests": ["Near pool", "Extra towels"]
+      }
+    }
+  ]
+  

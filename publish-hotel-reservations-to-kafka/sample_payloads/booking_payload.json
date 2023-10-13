@@ -1,0 +1,24 @@
+{
+  "bookingId": "R123456789",
+  "guest": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "johndoe@example.com",
+    "phoneNumber": "+1234567890"
+  },
+  "bookingDetails": {
+    "hotelId": "12345",
+    "roomType": "Deluxe",
+    "checkInDate": "2023-10-05",
+    "checkOutDate": "2023-10-10",
+    "numberOfGuests": 2,
+    "kidsAges": [
+      5,
+      8
+    ],
+    "specialRequests": [
+      "Near elevator",
+      "Extra pillows"
+    ]
+  }
+}

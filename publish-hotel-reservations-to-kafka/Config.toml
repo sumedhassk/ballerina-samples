@@ -1,0 +1,10 @@
+# Configuration file for "booking_service"
+# How to use see:
+# https://ballerina.io/learn/configure-ballerina-programs/provide-values-to-configurable-variables/#provide-via-toml-syntax
+
+
+kafkaUrl = "localhost:9092"	# Type of STRING
+
+
+kafkaTopic = "reservations"	# Type of STRING
+
