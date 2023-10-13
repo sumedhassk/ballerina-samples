@@ -12,12 +12,28 @@ This sample focuses only on sharing reservations with other PMS modules. The fol
 
 ## Integration tools in Ballerina platform
 
+![](./images/integration-overview.png)
+
 ### JSON to Ballerina record generator
 
+![](./images/record-definitions-from-json.png)
+
 ### Service designer 
+![](./images/service-view.png)
+![](./images/service-designer.png)
 
 ### `Config.toml` generator
+![](./images/configurable-editor.png)
+![](./images/create-config-toml.png)
 
 ### Data mapper 
+![](./images/data-mapper.png)
 
 ### Try it tool 
+![](./images/try-it-tool.png)
+
+### Sequence diagrams
+![](./images/sequence-diagram.png)
+
+### Type diagrams
+![](./images/type-diagram.png)

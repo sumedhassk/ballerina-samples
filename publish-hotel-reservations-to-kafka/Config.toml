@@ -4,7 +4,5 @@
 
 
 kafkaUrl = "localhost:9092"	# Type of STRING
-
-
 kafkaTopic = "reservations"	# Type of STRING
 

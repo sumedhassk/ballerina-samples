@@ -1,2 +1,2 @@
-# ballerina-samples
-Sample Ballerina programs
+# Ballerina Samples
+This repository contains various sample packages written in Ballerina.
