@@ -4,36 +4,40 @@ This sample demonstrates how to publish hotel reservation events to Kafak using 
 ## Integration scenario
 Following image describes the various stages of the hotel reservation process. 
 
-![](./images/hotel-reservation-process.png)
+<img src="./images/hotel-reservation-process.png" width=50% height=50%>
 
 This sample focuses only on sharing reservations with other PMS modules. The following sequence diagram describes the exact integration. 
-
-![](./images/hand-drawn-sequence-diagram.png)
+<img src="./images/hand-drawn-sequence-diagram.png" width=50% height=50%>
 
 ## Integration tools in Ballerina platform
-
-![](./images/integration-overview.png)
+<img src="./images/integration-overview.png" width=50% height=50%>
 
 ### JSON to Ballerina record generator
-
-![](./images/record-definitions-from-json.png)
+---
+<img src="./images/record-definitions-from-json.png" width=50% height=50%>
 
 ### Service designer 
-![](./images/service-view.png)
-![](./images/service-designer.png)
+---
+<img src="./images/service-view.png" width=50% height=50%>
+<img src="./images/service-designer.png" width=50% height=50%>
 
 ### `Config.toml` generator
-![](./images/configurable-editor.png)
-![](./images/create-config-toml.png)
+---
+<img src="./images/configurable-editor.png" width=50% height=50%>
+<img src="./images/create-config-toml.png" width=50% height=50%>
 
 ### Data mapper 
-![](./images/data-mapper.png)
+---
+<img src="./images/data-mapper.png" width=50% height=50%>
 
-### Try it tool 
-![](./images/try-it-tool.png)
+### Try it tool
+--- 
+<img src="./images/try-it-tool.png" width=50% height=50%>
 
 ### Sequence diagrams
-![](./images/sequence-diagram.png)
+---
+<img src="./images/sequence-diagram.png" width=50% height=50%>
 
 ### Type diagrams
-![](./images/type-diagram.png)
+---
+<img src="./images/type-diagram.png" width=50% height=50%>
