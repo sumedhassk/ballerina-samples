@@ -1,0 +1,20 @@
+version: '2.14.0'
+
+services:
+  mysql:
+    image: 'mysql:8-oracle'
+    ports:
+      - '3306:3306'
+    network_mode: "host"
+    environment:
+      - MYSQL_ROOT_PASSWORD=most_secure_root_password123
+      - MYSQL_DATABASE=order_biblio_database
+      - MYSQL_USER=order_biblio_user
+      - MYSQL_PASSWORD=most_secure_password123
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
+    volumes:
+      - "../persist/script.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./init-data.sql:/docker-entrypoint-initdb.d/init-data.sql" 

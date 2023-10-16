@@ -1,0 +1,10 @@
+[order_biblio]
+host = "localhost"
+port = 3306
+user = "order_biblio_user"
+password = "most_secure_password123"
+database = "order_biblio_database"
+
+[order_biblio.connectionOptions.ssl]
+allowPublicKeyRetrieval=true
+
