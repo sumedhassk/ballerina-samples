@@ -1,8 +1,19 @@
-# OrderBiblio
+# OrderBiblio service
 In this directory, you'll find the backend API, crafted using Ballerina, as detailed in the tweet linked below. 
 [https://twitter.com/RaulJuncoV/status/1713518999353327854?s=20](https://twitter.com/RaulJuncoV/status/1713518999353327854?s=20)
 
-## Original handwritten description
+
+## Table of contents
+<!--ts-->
+   * [Original description](#original-description)
+   * [Data Model](#data-model)
+      * [Describing entities in Ballerina](#describing-entities-in-ballerina)
+      * [ER diagram](#er-diagram)
+      * [MySQL as the datastore](#mysql-as-the-datastore)
+   * [Service Interface](#service-interface)
+<!--te-->
+
+## Original description
 ```
 Learning backend should be exciting, not exhausting!
 
@@ -72,11 +83,11 @@ Bonus point if you set a Postman collection to test your API.
 What else?
 ``` 
 
-## Data Model
+## Data model
 
 This section presents the data model derived from the preceding description.
 
-### Ballerina Records Representing Entities
+### Describing entities in Ballerina
 Ballerina's [`bal persist`](https://ballerina.io/learn/bal-persist-overview/) provides functionality akin to ORM within the platform. It introduces a resource-centric API tailored for databases, which is constructed based on the entities defined in your data model. Ballerina record types enable you to define your entities and their interrelationships. Below, you'll find the comprehensive data model crafted for this demonstration.
 
 ```ballerina
@@ -117,7 +128,6 @@ type Payment record {|
 ### ER diagram 
 The ER diagram provided below is generated using the Ballerina VSCode extension. It serves as a visual representation of the aforementioned type definitions. This notion of "code as the picture and the picture as the code" emphasizes the bi-directional mapping between the code and its visual representation.
 <img src="./images/data_model.png" width=75% height=75%>
-
 
 ### MySQL as the datastore
 In this sample, I've chosen MySQL as the datastore. Besides MySQL, `bal persist` also supports MSSQL, Google Sheets, and In-memory databases. Below is the DDL generated using the `bal persist generate` command for the previously discussed data model.
@@ -167,7 +177,7 @@ CREATE TABLE `Payment` (
 
 ```
 
-## Service Interface
+## Service interface
 Based on the original description, I developed an HTTP service using Ballerina. One of Ballerina's strengths lies in its cloud-native abstractions, such as services, resources, clients, and network interactions, which are seamlessly integrated into the language. These abstractions facilitate a refined and intuitive representation of service interfaces. Refer to the image below for a visual representation:
 
 Here are key highlights:
