@@ -3,6 +3,8 @@ import ballerina/log;
 import ballerina/persist;
 import ballerina/uuid;
 
+configurable int servicePort = ?;
+
 type InsufficientStockError distinct error;
 
 type OrderedBookNotFoundError distinct error;
@@ -45,9 +47,9 @@ type CompleteOrder record {|
     Payment payment;
 |};
 
-final Client booksDb = check new ();
+final Client booksDb = check initializeBooksDbClient();
 
-service /orderbiblio on new http:Listener(8081) {
+service /orderbiblio on new http:Listener(servicePort) {
 
     resource function get books() returns Book[]|http:InternalServerError {
         Book[]|persist:Error books = from var book in booksDb->/books(targetType = Book)
@@ -127,25 +129,6 @@ service /orderbiblio on new http:Listener(8081) {
         }
     }
 
-    resource function post orders(NewOrder newOrder) returns OrderWithItems|http:BadRequest|http:InternalServerError {
-        string orderId = uuid:createType4AsString();
-
-        transaction {
-            // Heavylifting is done by the processOrder function.
-            OrderWithItems processedOrder = check self.processOrder(newOrder, orderId);
-            check commit;
-            return processedOrder;
-        } on fail error e {
-            if e is InsufficientStockError|OrderedBookNotFoundError {
-                return <http:BadRequest>{body: e.message()};
-            } else {
-                log:printError("Error while inserting order into the database", 'error = e,
-                orderDetails = newOrder, orderId = orderId);
-                return http:INTERNAL_SERVER_ERROR;
-            }
-        }
-    }
-
     resource function post payments(PaymentDetails paymentDetails) returns Payment|http:BadRequest|http:InternalServerError {
         Payment payment = {
             paymentId: uuid:createType4AsString(),
@@ -163,6 +146,23 @@ service /orderbiblio on new http:Listener(8081) {
         } else {
             log:printError("Error while inserting payment into the database", 'error = insertStatus, paymentDetails = paymentDetails);
             return http:INTERNAL_SERVER_ERROR;
+        }
+    }
+
+    resource function post orders(NewOrder newOrder) returns OrderWithItems|http:BadRequest|http:InternalServerError {
+        string orderId = uuid:createType4AsString();
+        transaction {
+            OrderWithItems processedOrder = check self.processOrder(newOrder, orderId);
+            check commit;
+            return processedOrder;
+        } on fail error e {
+            if e is InsufficientStockError|OrderedBookNotFoundError {
+                return <http:BadRequest>{body: e.message()};
+            } else {
+                log:printError("Error while inserting order into the database", 'error = e,
+                orderDetails = newOrder, orderId = orderId);
+                return http:INTERNAL_SERVER_ERROR;
+            }
         }
     }
 
@@ -190,7 +190,6 @@ service /orderbiblio on new http:Listener(8081) {
         // Step 3: Insert order items
         OrderItem[] orderItems = createOrderItemsFromNewOrder(newOrder, orderId);
         _ = check booksDb->/orderitems.post(orderItems);
-
         return {...'order, orderItems};
     }
 }
@@ -210,4 +209,8 @@ function createOrderItemsFromNewOrder(NewOrder newOrder, string orderId) returns
         quantity: newOrderItem.quantity,
         price: newOrderItem.price
     };
+
+function initializeBooksDbClient() returns Client|error {
+    return new Client();
+}
 
