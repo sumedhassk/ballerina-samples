@@ -1,6 +1,5 @@
 import ballerina/persist as _;
 
-// Represents the Books entity
 type Book record {|
     readonly string bookId;          
     string title;
@@ -10,7 +9,6 @@ type Book record {|
 	OrderItem? orderitem;
 |};
 
-// Represents the Orders entity
 type Order record {|
     readonly string orderId;
     string customerId;
@@ -20,7 +18,6 @@ type Order record {|
 	Payment? payment;
 |};
 
-// Represents the OrderItems entity
 type OrderItem record {|
     readonly string orderItemId;
     int quantity;
@@ -29,7 +26,6 @@ type OrderItem record {|
     Order 'order;
 |};
 
-// Represents the Payments entity
 type Payment record {|
     readonly string paymentId;
     decimal paymentAmount;
