@@ -45,12 +45,12 @@ type CompleteOrder record {|
     Payment payment;
 |};
 
-final Client db = check new ();
+final Client booksDb = check new ();
 
 service /orderbiblio on new http:Listener(8081) {
 
     resource function get books() returns Book[]|http:InternalServerError {
-        Book[]|persist:Error books = from var book in db->/books(targetType = Book)
+        Book[]|persist:Error books = from var book in booksDb->/books(targetType = Book)
             select book;
         if books is persist:Error {
             log:printError("Error while retrieving books from the database", 'error = books);
@@ -61,7 +61,7 @@ service /orderbiblio on new http:Listener(8081) {
     }
 
     resource function get book/[string bookId]() returns Book|http:NotFound|http:InternalServerError {
-        Book|persist:Error book = db->/books/[bookId];
+        Book|persist:Error book = booksDb->/books/[bookId];
         if book is persist:NotFoundError {
             return http:NOT_FOUND;
         } else if book is persist:Error {
@@ -81,7 +81,7 @@ service /orderbiblio on new http:Listener(8081) {
             stock: newBook.stock
         };
 
-        string[]|persist:Error insertStatus = db->/books.post([book]);
+        string[]|persist:Error insertStatus = booksDb->/books.post([book]);
         if insertStatus is string[] {
             return book;
         } else {
@@ -91,7 +91,7 @@ service /orderbiblio on new http:Listener(8081) {
     }
 
     resource function delete book/[string bookId]() returns http:NoContent|http:NotFound|http:InternalServerError {
-        Book|persist:Error book = db->/books/[bookId].delete();
+        Book|persist:Error book = booksDb->/books/[bookId].delete();
         if book is persist:NotFoundError {
             return http:NOT_FOUND;
         } else if book is persist:Error {
@@ -105,7 +105,7 @@ service /orderbiblio on new http:Listener(8081) {
     resource function get orders() returns CompleteOrder[]|http:InternalServerError {
         // order is a keyword in Ballerina, so we use 'order instead as the variable name.
         // In case, you haven't noticed, here we join the orders, orderItems and payments tables.
-        CompleteOrder[]|persist:Error orders = from var 'order in db->/orders(targetType = CompleteOrder)
+        CompleteOrder[]|persist:Error orders = from var 'order in booksDb->/orders(targetType = CompleteOrder)
             select 'order;
         if orders is persist:Error {
             log:printError("Error while retrieving orders from the database", 'error = orders);
@@ -116,7 +116,7 @@ service /orderbiblio on new http:Listener(8081) {
     }
 
     resource function get orders/[string orderId]() returns CompleteOrder|http:NotFound|http:InternalServerError {
-        CompleteOrder|persist:Error completeOrder = db->/orders/[orderId];
+        CompleteOrder|persist:Error completeOrder = booksDb->/orders/[orderId];
         if completeOrder is persist:NotFoundError {
             return http:NOT_FOUND;
         } else if completeOrder is persist:Error {
@@ -154,7 +154,7 @@ service /orderbiblio on new http:Listener(8081) {
             paymentOrderId: paymentDetails.orderId
         };
 
-        string[]|persist:Error insertStatus = db->/payments.post([payment]);
+        string[]|persist:Error insertStatus = booksDb->/payments.post([payment]);
         if insertStatus is string[] {
             return payment;
         } else if insertStatus is persist:ConstraintViolationError {
@@ -170,11 +170,11 @@ service /orderbiblio on new http:Listener(8081) {
     transactional function processOrder(NewOrder newOrder, string orderId) returns OrderWithItems|error {
         // Step 1: Insert order
         Order 'order = createOrderFromNewOrder(newOrder, orderId);
-        _ = check db->/orders.post(['order]);
+        _ = check booksDb->/orders.post(['order]);
 
         // Step 2: Update stock of books
         foreach var {bookId, quantity} in newOrder.orderItems {
-            Book|persist:Error book = db->/books/[bookId];
+            Book|persist:Error book = booksDb->/books/[bookId];
             if book is persist:NotFoundError {
                 return error OrderedBookNotFoundError(string `Book with id ${bookId} not found`);
             } else if book is persist:Error {
@@ -183,13 +183,13 @@ service /orderbiblio on new http:Listener(8081) {
                 if book.stock < quantity {
                     return error InsufficientStockError(string `Insufficient stock for book with id ${bookId}`);
                 }
-                _ = check db->/books/[bookId].put({stock: book.stock - quantity});
+                _ = check booksDb->/books/[bookId].put({stock: book.stock - quantity});
             }
         }
 
         // Step 3: Insert order items
         OrderItem[] orderItems = createOrderItemsFromNewOrder(newOrder, orderId);
-        _ = check db->/orderitems.post(orderItems);
+        _ = check booksDb->/orderitems.post(orderItems);
 
         return {...'order, orderItems};
     }

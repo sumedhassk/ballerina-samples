@@ -1,10 +1,9 @@
 // AUTO-GENERATED FILE. DO NOT MODIFY.
-
 // This file is an auto-generated file by Ballerina persistence layer for model.
 // It should not be modified by hand.
-
-import ballerina/persist;
 import ballerina/jballerina.java;
+import ballerina/persist;
+import ballerina/sql;
 import ballerinax/mysql;
 import ballerinax/mysql.driver as _;
 import ballerinax/persist.sql as psql;
@@ -61,7 +60,7 @@ public isolated client class Client {
             keyFields: ["orderId"],
             joinMetadata: {
                 orderItems: {entity: OrderItem, fieldName: "orderItems", refTable: "OrderItem", refColumns: ["'orderOrderId"], joinColumns: ["orderId"], 'type: psql:MANY_TO_ONE},
-                payment: {entity: Payment, fieldName: "payment", refTable: "Payment", refColumns: ["orderOrderId"], joinColumns: ["orderId"], 'type: psql:ONE_TO_ONE}
+                payment: {entity: Payment, fieldName: "payment", refTable: "Payment", refColumns: ["paymentOrderId"], joinColumns: ["orderId"], 'type: psql:ONE_TO_ONE}
             }
         },
         [ORDER_ITEM] : {
@@ -121,7 +120,7 @@ public isolated client class Client {
         };
     }
 
-    isolated resource function get books(BookTargetType targetType = <>) returns stream<targetType, persist:Error?> = @java:Method {
+    isolated resource function get books(BookTargetType targetType = <>, sql:ParameterizedQuery whereClause = ``, sql:ParameterizedQuery orderByClause = ``, sql:ParameterizedQuery limitClause = ``, sql:ParameterizedQuery groupByClause = ``) returns stream<targetType, persist:Error?> = @java:Method {
         'class: "io.ballerina.stdlib.persist.sql.datastore.MySQLProcessor",
         name: "query"
     } external;
@@ -160,7 +159,7 @@ public isolated client class Client {
         return result;
     }
 
-    isolated resource function get orders(OrderTargetType targetType = <>) returns stream<targetType, persist:Error?> = @java:Method {
+    isolated resource function get orders(OrderTargetType targetType = <>, sql:ParameterizedQuery whereClause = ``, sql:ParameterizedQuery orderByClause = ``, sql:ParameterizedQuery limitClause = ``, sql:ParameterizedQuery groupByClause = ``) returns stream<targetType, persist:Error?> = @java:Method {
         'class: "io.ballerina.stdlib.persist.sql.datastore.MySQLProcessor",
         name: "query"
     } external;
@@ -199,7 +198,7 @@ public isolated client class Client {
         return result;
     }
 
-    isolated resource function get orderitems(OrderItemTargetType targetType = <>) returns stream<targetType, persist:Error?> = @java:Method {
+    isolated resource function get orderitems(OrderItemTargetType targetType = <>, sql:ParameterizedQuery whereClause = ``, sql:ParameterizedQuery orderByClause = ``, sql:ParameterizedQuery limitClause = ``, sql:ParameterizedQuery groupByClause = ``) returns stream<targetType, persist:Error?> = @java:Method {
         'class: "io.ballerina.stdlib.persist.sql.datastore.MySQLProcessor",
         name: "query"
     } external;
@@ -238,7 +237,7 @@ public isolated client class Client {
         return result;
     }
 
-    isolated resource function get payments(PaymentTargetType targetType = <>) returns stream<targetType, persist:Error?> = @java:Method {
+    isolated resource function get payments(PaymentTargetType targetType = <>, sql:ParameterizedQuery whereClause = ``, sql:ParameterizedQuery orderByClause = ``, sql:ParameterizedQuery limitClause = ``, sql:ParameterizedQuery groupByClause = ``) returns stream<targetType, persist:Error?> = @java:Method {
         'class: "io.ballerina.stdlib.persist.sql.datastore.MySQLProcessor",
         name: "query"
     } external;
@@ -276,6 +275,14 @@ public isolated client class Client {
         _ = check sqlClient.runDeleteQuery(paymentId);
         return result;
     }
+
+    remote isolated function queryNativeSQL(sql:ParameterizedQuery sqlQuery, typedesc<record {}> rowType = <>) returns stream<rowType, persist:Error?> = @java:Method {
+        'class: "io.ballerina.stdlib.persist.sql.datastore.MySQLProcessor"
+    } external;
+
+    remote isolated function executeNativeSQL(sql:ParameterizedQuery sqlQuery) returns psql:ExecutionResult|persist:Error = @java:Method {
+        'class: "io.ballerina.stdlib.persist.sql.datastore.MySQLProcessor"
+    } external;
 
     public isolated function close() returns persist:Error? {
         error? result = self.dbClient.close();
