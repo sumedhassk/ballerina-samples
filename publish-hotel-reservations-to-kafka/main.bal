@@ -1,8 +1,10 @@
-import ballerina/lang.'string as string0;
-import ballerinax/kafka;
-import ballerina/log;
 import ballerina/http;
+import ballerina/lang.'string as string0;
+import ballerina/lang.runtime;
+import ballerina/log;
+import ballerina/observe;
 import ballerinax/jaeger as _;
+import ballerinax/kafka;
 import ballerinax/prometheus as _;
 
 configurable string kafkaUrl = ?;
@@ -54,21 +56,46 @@ final kafka:Producer kafka = check new (bootstrapServers = kafkaUrl, config = {
 
 service /abc on new http:Listener(8081) {
     resource function post bookings(BookingRequest[] payload) returns http:Created|http:InternalServerError {
+        // Start publishing to Kafka in separate strands.
+        future<kafka:Error?>[] futures = [];
         foreach var bookingReq in payload {
-            // 1) Transform a booking request to a reservation
-            Reservation reservation = transformBookingToReservation(bookingReq);
-            // 2) Publish the reservation to Kafka
-            kafka:Error? status = kafka->send({value: reservation, topic: kafkaTopic});
+            future<kafka:Error?> f = start publishToKafka(bookingReq);
+            futures.push(f);
+        }
+
+        // Let's wait for all 'publishToKafka' funtions to complete.
+        foreach var f in futures {
+            kafka:Error? status = wait f;
             if status is kafka:Error {
-                log:printError("Error while publishing the reservation to Kafka: ", reservation = reservation, 'error = status);
+                // Here we are returning if at least one of the 'publishToKafka' functions failed.
+                // Not ideal, but I am doing this for the sake of simplicity.
                 return http:INTERNAL_SERVER_ERROR;
             }
         }
+
+        // Send 201 Created response, if all the 'publishToKafka' functions succeeded.
+        log:printInfo("Successfully published all the reservations to Kafka.");
         return http:CREATED;
     }
 }
 
-function transformBookingToReservation(BookingRequest bookingRequest) returns Reservation => {
+@observe:Observable
+isolated function publishToKafka(BookingRequest bookingReq) returns kafka:Error? {
+    // 1) Transform a booking request to a reservation
+    Reservation reservation = transformBookingToReservation(bookingReq);
+    // 2) Publish the reservation to Kafka
+    kafka:Error? status = kafka->send({value: reservation, topic: kafkaTopic});
+    
+    // Introduce a delay to simulate a real-world scenario.
+    runtime:sleep(0.05);
+    if status is kafka:Error {
+        log:printError("Error while publishing the reservation to Kafka: ", reservation = reservation, 'error = status);
+        return status;
+    }
+}
+
+@observe:Observable
+isolated function transformBookingToReservation(BookingRequest bookingRequest) returns Reservation => {
     reservationId: bookingRequest.bookingId,
     guest: bookingRequest.guest,
     resevationDetails: {
@@ -82,5 +109,4 @@ function transformBookingToReservation(BookingRequest bookingRequest) returns Re
         specialRequests: string0:'join(",", ...bookingRequest.bookingDetails.specialRequests)
     }
 };
-
 
