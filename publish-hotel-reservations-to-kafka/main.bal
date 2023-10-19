@@ -2,6 +2,8 @@ import ballerina/lang.'string as string0;
 import ballerinax/kafka;
 import ballerina/log;
 import ballerina/http;
+import ballerinax/jaeger as _;
+import ballerinax/prometheus as _;
 
 configurable string kafkaUrl = ?;
 configurable string kafkaTopic = ?;

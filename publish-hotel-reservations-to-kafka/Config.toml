@@ -2,7 +2,22 @@
 # How to use see:
 # https://ballerina.io/learn/configure-ballerina-programs/provide-values-to-configurable-variables/#provide-via-toml-syntax
 
-
 kafkaUrl = "localhost:9092"	# Type of STRING
 kafkaTopic = "reservations"	# Type of STRING
+
+
+## Uncomment this section to enable tracing and metrics for this service ## #
+[ballerina.observe]
+metricsEnabled=true
+metricsReporter="prometheus"
+tracingEnabled=true
+tracingProvider="jaeger"
+
+[ballerinax.jaeger]
+agentHostname="localhost"  # Optional Configuration. Default value is localhost
+agentPort=4317             # Optional Configuration. Default value is 55680
+
+[ballerinax.prometheus]
+port=9797
+host="0.0.0.0"
 

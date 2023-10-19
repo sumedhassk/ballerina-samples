@@ -2,7 +2,7 @@
 org = "sameera"
 name = "publish_hotel_reservations_to_kafka"
 version = "0.1.0"
-distribution = "2201.8.1"
+distribution = "2201.8.2"
 
 [build-options]
 observabilityIncluded = true
