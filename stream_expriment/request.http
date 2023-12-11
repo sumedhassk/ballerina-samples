@@ -1,0 +1,21 @@
+### POST
+POST http://localhost:8006/temp
+Content-Type: application/json
+
+{
+    "sensorId": "sensor_12345",
+    "temperature": 75.3,
+    "unit": "F",
+    "timestamp": "2023-12-11T15:00:00Z"
+}
+
+### POST1
+POST http://localhost:8006/temp
+Content-Type: application/json
+
+{
+    "sensorId": "sensor_12345",
+    "temperature": 25.3,
+    "unit": "C",
+    "timestamp": "2023-12-11T15:00:00Z"
+}
