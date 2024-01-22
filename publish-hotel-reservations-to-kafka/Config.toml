@@ -5,7 +5,6 @@
 kafkaUrl = "localhost:9092"	# Type of STRING
 kafkaTopic = "reservations"	# Type of STRING
 
-
 ## Uncomment this section to enable tracing and metrics for this service ## #
 [ballerina.observe]
 metricsEnabled=true

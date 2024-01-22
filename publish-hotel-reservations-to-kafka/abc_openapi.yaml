@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: Abc
+  version: 0.1.0
+servers:
+- url: "{server}:{port}/abc"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: "8081"
+paths:
+  /bookings:
+    post:
+      operationId: postBookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/BookingRequest'
+      responses:
+        "201":
+          description: Created
+        "500":
+          description: InternalServerError
+components:
+  schemas:
+    BookingRequest:
+      required:
+      - bookingDetails
+      - bookingId
+      - guest
+      type: object
+      properties:
+        bookingId:
+          type: string
+        guest:
+          $ref: '#/components/schemas/Guest'
+        bookingDetails:
+          $ref: '#/components/schemas/BookingDetails'
+    BookingDetails:
+      required:
+      - checkInDate
+      - checkOutDate
+      - hotelId
+      - kidsAges
+      - numberOfGuests
+      - roomType
+      - specialRequests
+      type: object
+      properties:
+        hotelId:
+          type: string
+        roomType:
+          type: string
+        checkInDate:
+          type: string
+        checkOutDate:
+          type: string
+        numberOfGuests:
+          type: integer
+          format: int64
+        kidsAges:
+          type: array
+          items:
+            type: integer
+            format: int64
+        specialRequests:
+          type: array
+          items:
+            type: string
+    Guest:
+      required:
+      - email
+      - firstName
+      - lastName
+      - phoneNumber
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
