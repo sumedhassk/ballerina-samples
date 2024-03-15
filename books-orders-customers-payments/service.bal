@@ -4,8 +4,6 @@ import ballerina/persist;
 import ballerina/uuid;
 import book_shop.datastore;
 
-configurable int servicePort = ?;
-
 type InsufficientStockError distinct error;
 
 type OrderedBookNotFoundError distinct error;
@@ -50,12 +48,12 @@ type CompleteOrder record {|
 
 final datastore:Client booksDb = check initializeBooksDbClient();
 
-service /book\-store on new http:Listener(servicePort) {
+service /book\-store on new http:Listener(8080) {
 
     # Initialize the service
     function init() {
         log:printInfo("*************************************************************************************************************");
-        log:printInfo("Book Store service started on port " + servicePort.toBalString() + ".");
+        log:printInfo("Book Store service started on port 8080");
         log:printInfo("*************************************************************************************************************");
     }    
 

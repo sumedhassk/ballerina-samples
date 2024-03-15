@@ -1,5 +1,3 @@
-servicePort = 8080
-
 [book_shop.datastore]
 host = "localhost"
 port = 3306
