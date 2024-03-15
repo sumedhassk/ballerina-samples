@@ -37,7 +37,7 @@ public isolated client class Client {
                 "orderitem.orderOrderId": {relation: {entityName: "orderitem", refField: "orderOrderId"}}
             },
             keyFields: ["bookId"],
-            joinMetadata: {orderitem: {entity: OrderItem, fieldName: "orderitem", refTable: "OrderItem", refColumns: ["bookBookId"], joinColumns: ["bookId"], 'type: psql:ONE_TO_ONE}}
+            joinMetadata: {orderitem: {entity: OrderItem, fieldName: "orderitem", refTable: "OrderItem", refColumns: ["orderitemBookId"], joinColumns: ["bookId"], 'type: psql:ONE_TO_ONE}}
         },
         [ORDER] : {
             entityName: "Order",
@@ -59,7 +59,7 @@ public isolated client class Client {
             },
             keyFields: ["orderId"],
             joinMetadata: {
-                orderItems: {entity: OrderItem, fieldName: "orderItems", refTable: "OrderItem", refColumns: ["'orderOrderId"], joinColumns: ["orderId"], 'type: psql:MANY_TO_ONE},
+                orderItems: {entity: OrderItem, fieldName: "orderItems", refTable: "OrderItem", refColumns: ["orderOrderId"], joinColumns: ["orderId"], 'type: psql:MANY_TO_ONE},
                 payment: {entity: Payment, fieldName: "payment", refTable: "Payment", refColumns: ["paymentOrderId"], joinColumns: ["orderId"], 'type: psql:ONE_TO_ONE}
             }
         },

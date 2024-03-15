@@ -1,0 +1,324 @@
+openapi: 3.0.1
+info:
+  title: Book Store
+  version: 0.1.0
+servers:
+- url: "{server}:{port}/book-store"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: servicePort
+paths:
+  /books:
+    get:
+      operationId: getBooks
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        "500":
+          description: InternalServerError
+  /book/{bookId}:
+    get:
+      operationId: getBookBookid
+      parameters:
+      - name: bookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        "404":
+          description: NotFound
+        "500":
+          description: InternalServerError
+    delete:
+      operationId: deleteBookBookid
+      parameters:
+      - name: bookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: NoContent
+        "404":
+          description: NotFound
+        "500":
+          description: InternalServerError
+  /book:
+    post:
+      operationId: postBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewBook'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        "500":
+          description: InternalServerError
+  /orders:
+    get:
+      operationId: getOrders
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompleteOrder'
+        "500":
+          description: InternalServerError
+    post:
+      operationId: postOrders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewOrder'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithItems'
+        "400":
+          description: BadRequest
+        "500":
+          description: InternalServerError
+  /orders/{orderId}:
+    get:
+      operationId: getOrdersOrderid
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteOrder'
+        "404":
+          description: NotFound
+        "500":
+          description: InternalServerError
+  /payments:
+    post:
+      operationId: postPayments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentDetails'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        "400":
+          description: BadRequest
+        "500":
+          description: InternalServerError
+components:
+  schemas:
+    Order:
+      required:
+      - createdAt
+      - customerId
+      - orderId
+      - totalPrice
+      type: object
+      properties:
+        orderId:
+          type: string
+        customerId:
+          type: string
+        createdAt:
+          type: string
+        totalPrice:
+          type: number
+          format: double
+    Payment:
+      required:
+      - paymentAmount
+      - paymentDate
+      - paymentId
+      - paymentOrderId
+      type: object
+      properties:
+        paymentId:
+          type: string
+        paymentAmount:
+          type: number
+          format: double
+        paymentDate:
+          type: string
+        paymentOrderId:
+          type: string
+    NewBook:
+      required:
+      - author
+      - price
+      - stock
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        price:
+          type: number
+          format: double
+        stock:
+          type: integer
+          format: int64
+    NewOrderItem:
+      required:
+      - bookId
+      - price
+      - quantity
+      type: object
+      properties:
+        bookId:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+        price:
+          type: number
+          format: double
+    Book:
+      required:
+      - author
+      - bookId
+      - price
+      - stock
+      - title
+      type: object
+      properties:
+        bookId:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        price:
+          type: number
+          format: double
+        stock:
+          type: integer
+          format: int64
+    CompleteOrder:
+      allOf:
+      - $ref: '#/components/schemas/OrderWithItems'
+      - required:
+        - payment
+        type: object
+        properties:
+          payment:
+            $ref: '#/components/schemas/Payment'
+    OrderItem:
+      required:
+      - orderItemId
+      - orderOrderId
+      - orderitemBookId
+      - price
+      - quantity
+      type: object
+      properties:
+        orderItemId:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+        price:
+          type: number
+          format: double
+        orderitemBookId:
+          type: string
+        orderOrderId:
+          type: string
+    PaymentDetails:
+      required:
+      - amouont
+      - orderId
+      - paymentDate
+      type: object
+      properties:
+        amouont:
+          type: number
+          format: double
+        paymentDate:
+          type: string
+        orderId:
+          type: string
+    OrderWithItems:
+      required:
+      - createdAt
+      - customerId
+      - orderId
+      - orderItems
+      - totalPrice
+      type: object
+      properties:
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        orderId:
+          type: string
+        customerId:
+          type: string
+        createdAt:
+          type: string
+        totalPrice:
+          type: number
+          format: double
+    NewOrder:
+      required:
+      - createdAt
+      - customerId
+      - orderItems
+      - totalPrice
+      type: object
+      properties:
+        customerId:
+          type: string
+        createdAt:
+          type: string
+        totalPrice:
+          type: number
+          format: double
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewOrderItem'

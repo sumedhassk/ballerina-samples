@@ -1,18 +1,17 @@
 [package]
-org = "sameera"
-name = "order_biblio"
+org = "sumedhakodithuwakku"
+name = "book_shop"
 version = "0.1.0"
-distribution = "2201.8.1"
+distribution = "2201.8.6"
 
 [build-options]
 observabilityIncluded = true
 
 [persist]
 datastore = "mysql"
-module = "order_biblio"
+module = "book_shop.datastore"
 
 [[platform.java17.dependency]]
 groupId = "io.ballerina.stdlib"
 artifactId = "persist.sql-native"
-version = "1.2.0"
-
+version = "1.2.1"

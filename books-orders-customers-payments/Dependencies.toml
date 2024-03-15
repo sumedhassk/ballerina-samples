@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.8.1"
+distribution-version = "2201.8.6"
 
 [[package]]
 org = "ballerina"
@@ -22,7 +22,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "cache"
-version = "3.7.0"
+version = "3.7.1"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -61,7 +61,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.10.3"
+version = "2.10.11"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -243,7 +243,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "observe"
-version = "1.2.0"
+version = "1.2.2"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -260,7 +260,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "persist"
-version = "1.2.0"
+version = "1.2.2"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -271,7 +271,7 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "sql"
-version = "1.11.1"
+version = "1.12.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -372,7 +372,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "mysql.driver"
-version = "1.5.0"
+version = "1.6.0"
 modules = [
 	{org = "ballerinax", packageName = "mysql.driver", moduleName = "mysql.driver"}
 ]
@@ -380,7 +380,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "persist.sql"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "log"},
@@ -393,8 +393,8 @@ modules = [
 ]
 
 [[package]]
-org = "sameera"
-name = "order_biblio"
+org = "sumedhakodithuwakku"
+name = "book_shop"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -410,6 +410,7 @@ dependencies = [
 	{org = "ballerinax", name = "persist.sql"}
 ]
 modules = [
-	{org = "sameera", packageName = "order_biblio", moduleName = "order_biblio"}
+	{org = "sumedhakodithuwakku", packageName = "book_shop", moduleName = "book_shop"},
+	{org = "sumedhakodithuwakku", packageName = "book_shop", moduleName = "book_shop.datastore"}
 ]
 

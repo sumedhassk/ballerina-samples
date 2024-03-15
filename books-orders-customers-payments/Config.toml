@@ -1,12 +1,11 @@
-servicePort = 8081
+servicePort = 8080
 
-## Database connection options
+[book_shop.datastore]
 host = "localhost"
 port = 3306
-user = "order_biblio_user"
-password = "most_secure_password123"
-database = "order_biblio_database"
+user = "root"
+password = "yLo2V350plbAE07"
+database = "book_store"
 
-[connectionOptions.ssl]
+[book_shop.datastore.connectionOptions.ssl]
 allowPublicKeyRetrieval=true
-

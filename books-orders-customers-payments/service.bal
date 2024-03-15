@@ -2,6 +2,7 @@ import ballerina/http;
 import ballerina/log;
 import ballerina/persist;
 import ballerina/uuid;
+import book_shop.datastore;
 
 configurable int servicePort = ?;
 
@@ -36,23 +37,30 @@ type PaymentDetails record {
 };
 
 type OrderWithItems record {|
-    *Order;
-    OrderItem[] orderItems;
+    *datastore:Order;
+    datastore:OrderItem[] orderItems;
 |};
 
 // Defines the data structure that represents a complete order.
 // This is the data structure that is returned by the GET orders resource.
 type CompleteOrder record {|
     *OrderWithItems;
-    Payment payment;
+    datastore:Payment payment;
 |};
 
-final Client booksDb = check initializeBooksDbClient();
+final datastore:Client booksDb = check initializeBooksDbClient();
 
-service /orderbiblio on new http:Listener(servicePort) {
+service /book\-store on new http:Listener(servicePort) {
 
-    resource function get books() returns Book[]|http:InternalServerError {
-        Book[]|persist:Error books = from var book in booksDb->/books(targetType = Book)
+    # Initialize the service
+    function init() {
+        log:printInfo("*************************************************************************************************************");
+        log:printInfo("Book Store service started on port " + servicePort.toBalString() + ".");
+        log:printInfo("*************************************************************************************************************");
+    }    
+
+    resource function get books() returns datastore:Book[]|http:InternalServerError {
+        datastore:Book[]|persist:Error books = from var book in booksDb->/books(targetType = datastore:Book)
             select book;
         if books is persist:Error {
             log:printError("Error while retrieving books from the database", 'error = books);
@@ -62,8 +70,8 @@ service /orderbiblio on new http:Listener(servicePort) {
         }
     }
 
-    resource function get book/[string bookId]() returns Book|http:NotFound|http:InternalServerError {
-        Book|persist:Error book = booksDb->/books/[bookId];
+    resource function get book/[string bookId]() returns datastore:Book|http:NotFound|http:InternalServerError {
+        datastore:Book|persist:Error book = booksDb->/books/[bookId];
         if book is persist:NotFoundError {
             return http:NOT_FOUND;
         } else if book is persist:Error {
@@ -74,8 +82,8 @@ service /orderbiblio on new http:Listener(servicePort) {
         }
     }
 
-    resource function post book(NewBook newBook) returns Book|http:InternalServerError {
-        Book book = {
+    resource function post book(NewBook newBook) returns datastore:Book|http:InternalServerError {
+        datastore:Book book = {
             bookId: uuid:createType4AsString(),
             title: newBook.title,
             author: newBook.author,
@@ -93,7 +101,7 @@ service /orderbiblio on new http:Listener(servicePort) {
     }
 
     resource function delete book/[string bookId]() returns http:NoContent|http:NotFound|http:InternalServerError {
-        Book|persist:Error book = booksDb->/books/[bookId].delete();
+        datastore:Book|persist:Error book = booksDb->/books/[bookId].delete();
         if book is persist:NotFoundError {
             return http:NOT_FOUND;
         } else if book is persist:Error {
@@ -129,8 +137,8 @@ service /orderbiblio on new http:Listener(servicePort) {
         }
     }
 
-    resource function post payments(PaymentDetails paymentDetails) returns Payment|http:BadRequest|http:InternalServerError {
-        Payment payment = {
+    resource function post payments(PaymentDetails paymentDetails) returns datastore:Payment|http:BadRequest|http:InternalServerError {
+        datastore:Payment payment = {
             paymentId: uuid:createType4AsString(),
             paymentAmount: paymentDetails.amouont,
             paymentDate: paymentDetails.paymentDate,
@@ -169,12 +177,12 @@ service /orderbiblio on new http:Listener(servicePort) {
     // A function with a "transactional" qualifier can only be called from a transactional context.
     transactional function processOrder(NewOrder newOrder, string orderId) returns OrderWithItems|error {
         // Step 1: Insert order
-        Order 'order = createOrderFromNewOrder(newOrder, orderId);
+        datastore:Order 'order = createOrderFromNewOrder(newOrder, orderId);
         _ = check booksDb->/orders.post(['order]);
 
         // Step 2: Update stock of books
         foreach var {bookId, quantity} in newOrder.orderItems {
-            Book|persist:Error book = booksDb->/books/[bookId];
+            datastore:Book|persist:Error book = booksDb->/books/[bookId];
             if book is persist:NotFoundError {
                 return error OrderedBookNotFoundError(string `Book with id ${bookId} not found`);
             } else if book is persist:Error {
@@ -188,20 +196,20 @@ service /orderbiblio on new http:Listener(servicePort) {
         }
 
         // Step 3: Insert order items
-        OrderItem[] orderItems = createOrderItemsFromNewOrder(newOrder, orderId);
+        datastore:OrderItem[] orderItems = createOrderItemsFromNewOrder(newOrder, orderId);
         _ = check booksDb->/orderitems.post(orderItems);
         return {...'order, orderItems};
     }
 }
 
-function createOrderFromNewOrder(NewOrder newOrder, string orderId) returns Order => {
+function createOrderFromNewOrder(NewOrder newOrder, string orderId) returns datastore:Order => {
     orderId: orderId,
     customerId: newOrder.customerId,
     createdAt: newOrder.createdAt,
     totalPrice: newOrder.totalPrice
 };
 
-function createOrderItemsFromNewOrder(NewOrder newOrder, string orderId) returns OrderItem[] => from var newOrderItem in newOrder.orderItems
+function createOrderItemsFromNewOrder(NewOrder newOrder, string orderId) returns datastore:OrderItem[] => from var newOrderItem in newOrder.orderItems
     select {
         orderItemId: uuid:createType4AsString(),
         orderOrderId: orderId,
@@ -210,7 +218,7 @@ function createOrderItemsFromNewOrder(NewOrder newOrder, string orderId) returns
         price: newOrderItem.price
     };
 
-function initializeBooksDbClient() returns Client|error {
-    return new Client();
+function initializeBooksDbClient() returns datastore:Client|error {
+    return new datastore:Client();
 }
 
